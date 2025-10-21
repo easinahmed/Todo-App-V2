@@ -1,30 +1,65 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-  value: 0,
+  todos: JSON.parse(localStorage.getItem("todos")) || [],
+  selectedTodo: null,
 }
 
 export const todoSlice = createSlice({
   name: 'todo',
   initialState,
   reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1
+    addTodo: (state, action) => {
+      state.todos.push(action.payload)
+      localStorage.setItem("todos", JSON.stringify(state.todos))
     },
-    decrement: (state) => {
-      state.value -= 1
+    removeTodo: (state, action) => {
+      state.todos = state.todos.filter(todo => todo.id !== action.payload)
+      localStorage.setItem("todos", JSON.stringify(state.todos))
     },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload
+    completeTodo: (state, action) => {
+      const updated = state.todos.map((t) => {
+        if (t.id === action.payload) {
+          return { ...t, isComplete: !t.isComplete }
+        }
+        return t
+      })
+
+      state.todos = updated
+
+      // ✅ Update selectedTodo if it’s the same one
+      if (state.selectedTodo && state.selectedTodo.id === action.payload) {
+        const updatedSelected = updated.find(t => t.id === action.payload)
+        state.selectedTodo = updatedSelected
+      }
+
+      localStorage.setItem("todos", JSON.stringify(state.todos))
     },
+
+    isEdit: (state, action) => {
+      const editTodo = state.todos.map((t) => {
+        if (t.id === action.payload) t.isEdit = !t.isEdit;
+        return t;
+
+      })
+      state.todos = editTodo;
+      localStorage.setItem("todos", JSON.stringify(state.todos))
+    },
+
+    setSelectedTodo: (state, action) => {
+      state.selectedTodo = action.payload
+    },
+
+
+    clearSelectedTodo: (state) => {
+      state.selectedTodo = null
+    }
+
+
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { increment, decrement, incrementByAmount } = todoSlice.actions
+export const { addTodo, removeTodo, isEdit, completeTodo, setSelectedTodo, clearSelectedTodo } = todoSlice.actions
 
 export default todoSlice.reducer

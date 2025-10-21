@@ -1,22 +1,32 @@
-import React from 'react'
-import CreateTask from '../components/CreateTask'
-import TaskList from '../components/TaskList'
+import { useState } from 'react'
+import { MenuIcon } from 'lucide-react'
+import Menu from '../components/Menu'
+import CreateTodo from '../components/CreateTodo'
+import DisplayTodo from '../components/DisplayTodo'
+import { useSelector } from 'react-redux'
+import DetailedTodo from '../components/DetailedTodo'
 
 const Home = () => {
+    const [isOpen, setIsOpen] = useState(false)
+    const { selectedTodo, todos } = useSelector((state) => state.todo)
+    
   return (
-    <div className=' p-8'>
-        <header className='flex items-center gap-10'>
+    <div className='container mx-auto grid grid-cols-[auto_1fr_auto] items-start gap-10 p-8'>
 
-        <span>HI</span>
-
-        <h1 className='text-4xl font-bold'>Today <span>{/* there will be dynamic value */}</span></h1>
+        <span className='transition-all '>
+        {!isOpen && <MenuIcon onClick={()=>setIsOpen(true)}/>}
         
-        </header>
+        {isOpen && <Menu onClose={()=>setIsOpen(false)} />}
+     
+        </span>
 
-        <main className='container mx-auto p-8'>
-            <CreateTask/>
-            <TaskList/>
+        <main className=' space-y-5 w-full '>
+          <h1 className='text-4xl font-bold'>Today <span className="text-slate-400 text-2xl ml-2">({todos.filter(t => !t.isComplete).length} tasks)</span></h1>
+            <CreateTodo/>
+            <DisplayTodo/>
         </main>
+
+       { selectedTodo && <DetailedTodo/>}
 
     </div>
   )
