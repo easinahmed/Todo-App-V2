@@ -13,7 +13,7 @@ const Menu = ({ onClose }) => {
   ];
 
   return (
-    <div className='bg-gray-100 rounded-md p-4 w-[300px]'>
+    <div className='bg-gray-100 rounded-2xl p-4 w-[300px]'>
       <h2 className='font-bold text-2xl flex items-center justify-between'>
         Menu <span onClick={onClose}><MenuIcon /></span>
       </h2>
