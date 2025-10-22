@@ -1,15 +1,15 @@
 import { useSelector, useDispatch } from "react-redux"
-import { clearSelectedTodo } from "../features/todo/todoSlice"
+import { clearSelectedTodo, removeTodo, isEdit } from "../features/todo/todoSlice"
 import { X } from "lucide-react"
 
 const DetailedTodo = () => {
   const dispatch = useDispatch()
   const { selectedTodo } = useSelector(state => state.todo)
-
-  if (!selectedTodo) return null // কিছু না সিলেক্ট করলে aside দেখাবে না
+  
+  if (!selectedTodo) return null 
 
   return (
-    <aside className="w-[300px] bg-gray-100 rounded-md p-4 transition-all shadow">
+    <aside className="w-[300px] bg-gray-100 rounded-md p-4 shadow transition-all">
       <div className="flex justify-between items-center mb-4">
         <h2 className="font-bold text-xl">Task Details</h2>
         <button
@@ -34,14 +34,24 @@ const DetailedTodo = () => {
             <span className="text-yellow-600 font-medium">Pending</span>
           )}
         </p>
-
-        {selectedTodo.description && (
-          <p>
-            <span className="font-semibold">Description:</span>{" "}
-            {selectedTodo.description}
-          </p>
-        )}
       </div>
+
+      <button
+        onClick={() => dispatch(isEdit(selectedTodo.id))}
+        className="mt-4 w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-600 transition"
+      >
+        Edit Task
+      </button>
+
+      <button
+        onClick={() => {
+          dispatch(removeTodo(selectedTodo.id))
+          dispatch(clearSelectedTodo())
+        }}
+        className="mt-2 w-full bg-red-500 text-white p-2 rounded-md hover:bg-red-600 transition"
+      >
+        Delete Task
+      </button>
     </aside>
   )
 }

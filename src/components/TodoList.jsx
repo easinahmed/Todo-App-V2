@@ -6,13 +6,11 @@ const TodoList = ({ todo }) => {
   const dispatch = useDispatch()
 
   const handleComplete = (e) => {
-    e.stopPropagation(); // Prevent todo selection when toggling complete
-    if (!todo) return;
+    e.stopPropagation()
     dispatch(completeTodo(todo.id))
   }
 
   const handleClick = () => {
-    if (!todo) return;
     dispatch(setSelectedTodo(todo))
   }
 
@@ -25,16 +23,14 @@ const TodoList = ({ todo }) => {
         type='checkbox'
         checked={todo?.isComplete}
         onChange={handleComplete}
-        className='w-5 h-5 focus:border-none focus:outline-none border-none'
+        className='w-5 h-5 cursor-pointer'
       />
 
       <div className='text-lg'>
         {todo?.isComplete ? <del>{todo?.text}</del> : todo?.text}
       </div>
 
-      <div className='flex items-center gap-2'>
-        <ArrowRight className='text-slate-400 font-bold' />
-      </div>
+      <ArrowRight className='text-slate-400' />
     </div>
   )
 }

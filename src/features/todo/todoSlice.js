@@ -13,36 +13,23 @@ export const todoSlice = createSlice({
       state.todos.push(action.payload)
       localStorage.setItem("todos", JSON.stringify(state.todos))
     },
+
     removeTodo: (state, action) => {
       state.todos = state.todos.filter(todo => todo.id !== action.payload)
       localStorage.setItem("todos", JSON.stringify(state.todos))
     },
+
     completeTodo: (state, action) => {
-      const updated = state.todos.map((t) => {
-        if (t.id === action.payload) {
-          return { ...t, isComplete: !t.isComplete }
-        }
-        return t
-      })
-
-      state.todos = updated
-
-      // ✅ Update selectedTodo if it’s the same one
-      if (state.selectedTodo && state.selectedTodo.id === action.payload) {
-        const updatedSelected = updated.find(t => t.id === action.payload)
-        state.selectedTodo = updatedSelected
-      }
-
+      state.todos = state.todos.map(todo =>
+        todo.id === action.payload ? { ...todo, isComplete: !todo.isComplete } : todo
+      )
       localStorage.setItem("todos", JSON.stringify(state.todos))
     },
 
     isEdit: (state, action) => {
-      const editTodo = state.todos.map((t) => {
-        if (t.id === action.payload) t.isEdit = !t.isEdit;
-        return t;
-
-      })
-      state.todos = editTodo;
+      state.todos = state.todos.map(todo =>
+        todo.id === action.payload ? { ...todo, isEdit: !todo.isEdit } : todo
+      )
       localStorage.setItem("todos", JSON.stringify(state.todos))
     },
 
@@ -50,16 +37,19 @@ export const todoSlice = createSlice({
       state.selectedTodo = action.payload
     },
 
-
     clearSelectedTodo: (state) => {
       state.selectedTodo = null
-    }
-
-
+    },
   },
 })
 
-// Action creators are generated for each case reducer function
-export const { addTodo, removeTodo, isEdit, completeTodo, setSelectedTodo, clearSelectedTodo } = todoSlice.actions
+export const {
+  addTodo,
+  removeTodo,
+  isEdit,
+  completeTodo,
+  setSelectedTodo,
+  clearSelectedTodo
+} = todoSlice.actions
 
 export default todoSlice.reducer

@@ -1,17 +1,15 @@
 import React from 'react'
 import TodoList from './TodoList'
-import { useDispatch, useSelector } from 'react-redux'
-import { setSelectedTodo } from '../features/todo/todoSlice'
+import { useSelector } from 'react-redux'
 
 const DisplayTodo = () => {
   const { todos } = useSelector((state) => state.todo)
-  const dispatch = useDispatch()
 
   return (
-    <div onClick={()=>dispatch(setSelectedTodo(todos))}>
+    <div>
       {todos.length === 0 && <p className='text-slate-500'>No todos yet.</p>}
       {todos.map((t) => (
-        <TodoList key={t.id}  todo={t} />
+        <TodoList key={t.id} todo={t} />
       ))}
     </div>
   )

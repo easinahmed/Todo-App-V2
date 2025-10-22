@@ -4,13 +4,11 @@ import { useDispatch } from "react-redux";
 import { addTodo } from "../features/todo/todoSlice";
 
 const CreateTodo = () => {
-  // Access todos from store if needed later; currently not used here
-  // const { todos: todo } = useSelector((state) => state.todo);
   const dispatch = useDispatch();
 
   const [message, setMessage] = useState("");
   const [newTodo, setNewTodo] = useState({
-    id: Date.now(), // unique ID by default
+    id: Date.now(),
     text: "",
     isEdit: false,
     isComplete: false,
@@ -29,29 +27,27 @@ const CreateTodo = () => {
       return;
     }
 
-    // ✅ Dispatch new todo
     dispatch(addTodo({ ...newTodo, id: Date.now() }));
 
-    // Reset input and message
-    setNewTodo({ ...newTodo, text: "" });
+    setNewTodo({
+      id: Date.now(),
+      text: "",
+      isEdit: false,
+      isComplete: false,
+    });
     setMessage("");
   };
 
-  // keep todo available if needed for counts; avoid console logging in production
-
   return (
     <div className="w-full p-4 border border-slate-200 rounded-md hover:border-slate-400 transition space-y-3">
-      {/* Input + Button */}
       <div className="flex items-center gap-2">
         <input
           type="text"
           value={newTodo.text}
-          onChange={(e) =>
-            setNewTodo({ ...newTodo, text: e.target.value })
-          }
-          onKeyDown={(e) => e.key === "Enter" && handleAddTodo()} // ✅ press Enter to add
+          onChange={(e) => setNewTodo({ ...newTodo, text: e.target.value })}
+          onKeyDown={(e) => e.key === "Enter" && handleAddTodo()}
           placeholder="Enter a new task..."
-          className="w-full px-3 py-2  rounded-md outline-none focus:outline-none transition text-slate-700"
+          className="w-full px-3 py-2 rounded-md outline-none text-slate-700"
         />
 
         <button
@@ -63,12 +59,7 @@ const CreateTodo = () => {
         </button>
       </div>
 
-      {/* Validation Message */}
-      {message && (
-        <p className="text-red-500 text-sm font-medium">{message}</p>
-      )}
-
-    
+      {message && <p className="text-red-500 text-sm font-medium">{message}</p>}
     </div>
   );
 };
