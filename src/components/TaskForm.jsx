@@ -7,7 +7,7 @@ import { nanoid } from "nanoid"
 const TaskForm = () => {
   const dispatch = useDispatch()
 
-   const [text, setText] = useState()
+   const [text, setText] = useState("")
    const handleSubmit =(e)=> {
       e.preventDefault();
 
@@ -24,7 +24,7 @@ const TaskForm = () => {
         text : text.trim(),
         completed: false,
       }))
-
+      setText("")
         
       
 
